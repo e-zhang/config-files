@@ -5,7 +5,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
-Plugin 'altercation/vim-colors-solarized'
+Plugin 'morhetz/gruvbox'
+Plugin 'jeaye/color_coded'
 
 Plugin 'L9'
 Plugin 'FuzzyFinder'
@@ -13,12 +14,14 @@ Plugin 'FuzzyFinder'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'scrooloose/nerdcommenter'
 
-Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'tpope/vim-surround'
 
 Plugin 'Raimondi/delimitMate'
 
 Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'rdnetto/YCM-Generator'
+
+Plugin 'hdima/python-syntax'
 
 call vundle#end()
 
@@ -28,10 +31,11 @@ syntax enable
 set cc=81 
 highlight ColorColumn ctermbg=244
 
+set t_Co=256
+
 set background=dark
-let g:solarized_termtrans=1
-let g:solarized_termcolors=256
-colorscheme solarized
+colorscheme gruvbox 
+highlight Comment cterm=italic
 
 au BufNewFile,BufRead,BufEnter *.cpp,*.hpp,*.h call SetCppOptions()
 function! SetCppOptions()
@@ -97,8 +101,15 @@ let g:ycm_server_log_level = 'debug'
 let g:ycm_goto_buffer_command = 'vertical-split'
 map <leader>gg :YcmCompleter GoToImprecise<CR>
 
+"color_coded stuff
+let g:color_coded_filetypes =['c', 'cpp', 'h', 'hpp']
+
 
 "NERDCommenter
 let g:NERDSpaceDelims = 1
 let g:NERDRemoveExtraSpaces = 1
+
+"clang format
+map <C-C> :pyf /home/eric.zhang/linux/source/llvm/tools/clang/tools/clang-format/clang-format.py<cr>
+imap <C-C> :pyf /home/eric.zhang/linux/source/llvm/tools/clang/tools/clang-format/clang-format.py<cr>
 
