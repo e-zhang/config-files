@@ -8,9 +8,6 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'morhetz/gruvbox'
 Plugin 'jeaye/color_coded'
 
-Plugin 'L9'
-Plugin 'FuzzyFinder'
-
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'scrooloose/nerdcommenter'
 
@@ -22,6 +19,10 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'rdnetto/YCM-Generator'
 
 Plugin 'hdima/python-syntax'
+Plugin 'davidzchen/vim-bazel'
+
+Plugin 'kien/ctrlp.vim'
+Plugin 'tpope/vim-repeat'
 
 call vundle#end()
 
@@ -37,20 +38,35 @@ set background=dark
 colorscheme gruvbox 
 highlight Comment cterm=italic
 
-au BufNewFile,BufRead,BufEnter *.cpp,*.hpp,*.h call SetCppOptions()
+autocmd FileType c,cpp call SetCppOptions()
 function! SetCppOptions()
 	set ts=2
 	set shiftwidth=2
 	set sts=2
 	set syntax=cpp
 	set cindent
+
+        "clang format
+        let g:clang_format_path = '/home/eric.zhang/linux/source/llvm_build/build/bin/clang-format'
+        map <C-C> :pyf /home/eric.zhang/linux/source/llvm/tools/clang/tools/clang-format/clang-format.py<cr>
+        imap <C-C> :pyf /home/eric.zhang/linux/source/llvm/tools/clang/tools/clang-format/clang-format.py<cr>
 endfunction
-au BufNewFile,BufRead,BufEnter *.py call SetPyOptions()
+
+autocmd FileType python call SetPyOptions()
 function! SetPyOptions()
 	set ts=4
 	set sw=4
 	set sts=4
 	set syntax=python
+endfunction
+
+autocmd FileType bazel call SetBazelOptions()
+function! SetBazelOptions()
+	set ts=4
+	set sw=4
+	set sts=4
+	set syntax=bazel
+        set smartindent
 endfunction
 
 set wildmode=longest,list,full
@@ -85,9 +101,10 @@ nnoremap <F5> :make -j15<Bar>:botright copen<Bar>:YcmRestartServer<CR>
 
 let mapleader=","
 
-let g:fuf_coveragefile_exclude = '\v\~$|\.(so.*|o|lo|la|swp|bak|pyc)$|bin$|lib$|(^|[/\\])\..*($|[/\\])|build[\/]'
-map <leader>ff :FufCoverageFile<CR>
-map <leader>fb :FufBuffer<CR>
+let g:ctrlp_custom_ignore = '\v\~$|\.(so.*|o|lo|la|swp|bak|pyc|h5)$|bin$|lib$|build[\/]|bazel.*[\/]'
+let g:ctrlp_match_window = 'top,order:ttb,min:1,max:15'
+let g:ctrlp_prompt_mappings = { 'PrtClearCache()': ['<F6>'] }
+map <leader>ff :CtrlP<CR>
 
 set completeopt-=preview
 
@@ -108,8 +125,4 @@ let g:color_coded_filetypes =['c', 'cpp', 'h', 'hpp']
 "NERDCommenter
 let g:NERDSpaceDelims = 1
 let g:NERDRemoveExtraSpaces = 1
-
-"clang format
-map <C-C> :pyf /home/eric.zhang/linux/source/llvm/tools/clang/tools/clang-format/clang-format.py<cr>
-imap <C-C> :pyf /home/eric.zhang/linux/source/llvm/tools/clang/tools/clang-format/clang-format.py<cr>
 
